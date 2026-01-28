@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RayAI</title>
-    
+   
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -17,6 +17,7 @@
                     },
                     animation: {
                         'gradient-bg': 'gradient-bg 5s ease infinite',
+                        'pulse-glow': 'pulse-glow 1.5s ease-in-out infinite',
                     },
                     keyframes: {
                         'gradient-bg': {
@@ -28,6 +29,10 @@
                             'background-size': '200% 200%',
                             'background-position': 'right center'
                         }
+                        },
+                        'pulse-glow': {
+                            '0%, 100%': { boxShadow: '0 0 10px rgba(6, 182, 212, 0.3)' },
+                            '50%': { boxShadow: '0 0 20px rgba(6, 182, 212, 0.7)' },
                         },
                     }
                 }
@@ -53,22 +58,23 @@
     </style>
 </head>
 <body class="dark bg-gradient-to-r from-zinc-900 via-gray-900 to-stone-900 animate-gradient-bg min-h-screen flex flex-col items-center py-[5%] px-4 font-sans text-slate-200">
-    
+   
     <main class="relative w-full max-w-7xl bg-slate-900/70 backdrop-blur-lg border border-slate-800 rounded-2xl shadow-neon-blue p-6 space-y-30 shadow-2xl shadow-slate-950/50 overflow-hidden">
         <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 opacity-80"></div>
         <div class="container mx-auto p-4">
             <h1 class="text-4xl font-extrabold tracking-tight text-center mb-4 tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500 glow-text">Bem-vindo ao RayAI</h1>
             <p class="text-white text-center text-lg">Inteligência artificial para emails</p>
         </div>
-        
-        <div id="input-section"> 
+       
+        <div id="input-section">
             <div id="content-text" class="tab-content border border-slate-700 rounded-xl bg-slate-850 overflow-hidden">
                 <textarea id="email-content"
                 class="w-full h-48 rounded-lg bg-transparent p-4 text-slate-300 resize-none placeholder:text-slate-600 focus:outline-none focus:border-transparent"
                 placeholder="Cole o conteúdo do email aqui para análise..."></textarea>
-                
-                <div class="flex space-x-2 p-1 rounded-lg">
-                    <label class="flex justify-center bg-cyan-950 shadow-[inset_0_0_10px_rgba(6,182,212,0.2)] rounded-md cursor-pointer hover:bg-cyan-900 transition-all duration-300">
+               
+                <div id="upload-section" class="flex space-x-2 p-1 rounded-lg">
+                    <label id="upload-label" class="flex flex-col justify-center items-center bg-cyan-950 shadow-[inset_0_0_10px_rgba(6,182,212,0.2)] rounded-md cursor-pointer hover:bg-cyan-900 transition-all duration-300">
+                        <svg id="icon-upload" class="hidden" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0,0,256,256" width="144px" height="144px" fill-rule="nonzero"><defs><linearGradient x1="9.858" y1="9.858" x2="38.142" y2="38.142" gradientUnits="userSpaceOnUse" id="color-1"><stop offset="0" stop-color="#334155"></stop><stop offset="1" stop-color="#003b8f"></stop></linearGradient></defs><g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(5.33333,5.33333)"><path d="M44,24c0,11.045 -8.955,20 -20,20c-11.045,0 -20,-8.955 -20,-20c0,-11.045 8.955,-20 20,-20c11.045,0 20,8.955 20,20z" fill="url(#color-1)"></path><path d="M32.172,16.172l-10.172,10.172l-5.172,-5.172c-0.781,-0.781 -2.047,-0.781 -2.828,0l-1.414,1.414c-0.781,0.781 -0.781,2.047 0,2.828l8,8c0.781,0.781 2.047,0.781 2.828,0l13,-13c0.781,-0.781 0.781,-2.047 0,-2.828l-1.414,-1.414c-0.781,-0.781 -2.047,-0.781 -2.828,0z" fill="#7e7e7e" opacity="0.05"></path><path d="M20.939,33.061l-8,-8c-0.586,-0.586 -0.586,-1.536 0,-2.121l1.414,-1.414c0.586,-0.586 1.536,-0.586 2.121,0l5.526,5.525l10.525,-10.525c0.586,-0.586 1.536,-0.586 2.121,0l1.414,1.414c0.586,0.586 0.586,1.536 0,2.121l-13,13c-0.585,0.585 -1.535,0.585 -2.121,0z" fill="#7e7e7e" opacity="0.07"></path><path d="M21.293,32.707l-8,-8c-0.391,-0.391 -0.391,-1.024 0,-1.414l1.414,-1.414c0.391,-0.391 1.024,-0.391 1.414,0l5.879,5.879l10.879,-10.879c0.391,-0.391 1.024,-0.391 1.414,0l1.414,1.414c0.391,0.391 0.391,1.024 0,1.414l-13,13c-0.39,0.391 -1.024,0.391 -1.414,0z" fill="#ffffff"></path></g></g></svg>
                         <div id="btn-file" class="text-cyan-400 py-2 px-4 text-sm font-medium hover:text-slate-200 transition-all duration-300">
                             Upload Arquivo (.txt, .pdf)
                         </div>
@@ -76,47 +82,38 @@
                     </label>
                 </div>
             </div>
-
             <button id="btn-analisar" class="w-full mt-6 py-3 px-6 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold rounded-xl shadow-neon-blue transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0">
                 Processar com IA
             </button>
-
         </div>
         <div id="loading-state" class="hidden py-12 flex flex-col items-center justify-center space-y-4 text-cyan-400">
              <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-t-2 border-cyan-400 shadow-neon-blue"></div>
             <p class="text-slate-300 animate-pulse">Analisando conteúdo...</p>
         </div>
-
         <div id="results-section" class="hidden mt-8 space-y-6 animate-fade-in-up">
-            
+           
             <div class="bg-slate-850/50 border border-emerald-900/50 rounded-xl p-6 relative overflow-hidden">
                 <div class="absolute inset-0 bg-emerald-500/5 pointer-events-none"></div>
-                
+               
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-semibold text-slate-200">Classificação</h3>
                     <span id="status" class="px-3 py-1 text-sm font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 rounded-full shadow-neon-green">
                         PRODUTIVO
                     </span>
                 </div>
-                
+               
                 <div>
                     <h3 class="text-sm font-medium text-slate-400 mb-2">Sugestão de Resposta Automática:</h3>
                     <div id="ai-response-text" class="bg-slate-900 border border-slate-700 p-4 rounded-lg text-slate-300 text-sm leading-relaxed">
                         "Olá, agradecemos o seu contato. Recebemos sua solicitação e já encaminhamos para a equipe técnica responsável. Em breve retornaremos com um status atualizado sobre o seu caso. Atenciosamente, Equipe AutoU."
                     </div>
-                    <button class="mt-3 text-xs flex items-center text-cyan-400 hover:text-cyan-300 transition-colors">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg>
-                        Copiar resposta
-                    </button>
                 </div>
             </div>
-
             <button id="btn-reset" class="w-full py-2 text-slate-400 hover:text-slate-200 transition-colors text-sm underline-offset-4 hover:underline">
                 Analisar outro email
             </button>
-            
+           
     </main>
-
     <div class="w-full max-w-7xl bg-slate-900/70 backdrop-blur-lg border border-slate-800 rounded-2xl shadow-neon-green p-6 mt-8 shadow-2xl shadow-slate-950/50 overflow-hidden">
         <table id="history-table" class="w-full">
             <tr class="text-left border-b-2 rounded-2xl border-slate-700">
@@ -127,7 +124,6 @@
             </tr>
         </table>
     </div>
-
     <script src="/static/js/script.js"></script>
 </body>
 </html>
