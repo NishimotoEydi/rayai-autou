@@ -1,27 +1,11 @@
 from fastapi import FastAPI, UploadFile, File, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from fastapi.middleware.cors import CORSMiddleware
-import nltk
-import os
-
-try:
-    nltk.data.find('corpora/stopwords')
-except LookupError:
-    nltk.download('stopwords')
-    nltk.download('punkt')
+from app.utils import extract_text_from_pdf, limpar_texto
+from app.ai_service import analisar_email
 
 app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-if os.path.exists("static"):
-    app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 @app.get("/")
 async def read_index():
