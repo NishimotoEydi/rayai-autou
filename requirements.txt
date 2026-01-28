@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+groq
+PyPDF2
+nltk
+python-multipart
