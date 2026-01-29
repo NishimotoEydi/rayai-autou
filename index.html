@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,6 +51,11 @@
     </script>
 
     <style type="text/tailwindcss">
+        @layer base {
+            body {
+                background-color: #020617; 
+            }
+        }
         @layer utilities {
             .painel-vidro {
                 @apply bg-glass backdrop-blur-xl border border-glass-border shadow-2xl;
@@ -61,7 +66,7 @@
         }
     </style>
 </head>
-<body class="bg-fundo-dark min-h-screen text-gray-200 antialiased relative overflow-x-hidden selection:bg-indigo-500/30 selection:text-indigo-200">
+<body class="bg-[#020617] bg-fundo-dark min-h-screen min-h-[100dvh] text-gray-200 antialiased relative overflow-x-hidden selection:bg-indigo-500/30">
 
     <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         <div class="absolute top-0 left-1/4 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl opacity-30 animate-flutuar"></div>
