@@ -1,99 +1,134 @@
-const btnAnalisar = document.getElementById('btn-analisar');
-const btnReset = document.getElementById('btn-reset');
-const inputSection = document.getElementById('input-section');
-const loadingState = document.getElementById('loading-state');
-const resultsSection = document.getElementById('results-section');
-const fileUpload = document.getElementById('file-upload');
-const btnFile = document.getElementById('btn-file');
-const uploadLabel = document.getElementById('upload-label');
-const textoEmail = document.getElementById('email-content');
-const uploadSection = document.getElementById('upload-section');
-const iconUpload = document.getElementById('icon-upload');
+const btnProcessar = document.getElementById('btn-processar');
+const btnNovaAnalise = document.getElementById('btn-nova-analise');
+const areaInput = document.getElementById('area-input');
+const areaCarregando = document.getElementById('area-carregando');
+const areaResultado = document.getElementById('area-resultado');
 
-fileUpload.addEventListener('change', () => {
-    if (fileUpload.files.length > 0) {
-        const fileName = fileUpload.files[0].name;
+const inputArquivo = document.getElementById('input-arquivo');
+const labelUpload = document.getElementById('label-upload');
+const visualizacaoArquivo = document.getElementById('visualizacao-arquivo');
+const nomeArquivoSpan = document.getElementById('nome-arquivo');
+const btnRemoverArquivo = document.getElementById('btn-remover-arquivo');
+
+const textoEmail = document.getElementById('texto-email');
+const badgeStatus = document.getElementById('badge-status');
+const textoResposta = document.getElementById('texto-resposta');
+
+inputArquivo.addEventListener('change', () => {
+    if (inputArquivo.files.length > 0) {
+        const arquivo = inputArquivo.files[0];
+
         textoEmail.classList.add('hidden');
-        iconUpload.classList.remove('hidden');
-        uploadSection.classList.add('justify-center', 'h-48');
-        btnFile.innerText = `Arquivo selecionado: ${fileName.substring(0, 20) + (fileName.length > 20 ? '...' : '')}`;
-        uploadLabel.classList.add('animate-pulse-glow', 'bg-cyan-900', 'items-end', 'flex');
-        setTimeout(() => {
-            uploadLabel.classList.remove('animate-pulse-glow');
-        }, 3000);
-    } else {
-        btnFile.innerText = 'Upload Arquivo (.txt, .pdf)';
-        uploadLabel.classList.remove('animate-pulse-glow', 'bg-cyan-900');
+        visualizacaoArquivo.classList.remove('hidden');
+        visualizacaoArquivo.classList.add('flex');
+
+        nomeArquivoSpan.innerText = arquivo.name.length > 35 
+            ? arquivo.name.substring(0, 35) + '...' 
+            : arquivo.name;
+
+        labelUpload.classList.add('border-indigo-500', 'bg-indigo-500/10');
     }
 });
 
-btnAnalisar.addEventListener('click', async () => {
-    const arquivoPdf = document.getElementById('file-upload');
-    const elementoStatus = document.getElementById('status');
-    const aiResponseText = document.getElementById('ai-response-text');
-    if (!textoEmail.value && !arquivoPdf.files[0]) {
-        alert("Por favor, cole um texto ou selecione um arquivo.");
+btnRemoverArquivo.addEventListener('click', (e) => {
+    e.stopPropagation(); 
+    inputArquivo.value = '';
+    
+    visualizacaoArquivo.classList.add('hidden');
+    visualizacaoArquivo.classList.remove('flex');
+    textoEmail.classList.remove('hidden');
+    
+    labelUpload.classList.remove('border-indigo-500', 'bg-indigo-500/10');
+});
+
+btnProcessar.addEventListener('click', async () => {
+    const temTexto = textoEmail.value.trim().length > 0;
+    const temArquivo = inputArquivo.files.length > 0;
+
+    if (!temTexto && !temArquivo) {
+        alert("Por favor, digite o email ou carregue um arquivo.");
         return;
     }
-    inputSection.classList.add('hidden');
-    loadingState.classList.remove('hidden');
+
+    areaInput.classList.add('hidden');
+    areaCarregando.classList.remove('hidden');
+
     const formData = new FormData();
     formData.append('text_input', textoEmail.value);
-    if (arquivoPdf.files[0]) {
-        formData.append('file_input', arquivoPdf.files[0]);
+    if (temArquivo) {
+        formData.append('file_input', inputArquivo.files[0]);
     }
+
     try {
         const response = await fetch('/analyze', {
             method: 'POST',
             body: formData
         });
-        if (!response.ok) throw new Error('Erro na comunicação');
-        const data = await response.json();
-        aiResponseText.innerText = data.resposta_sugerida;
-        if (data.classificacao === 'Produtivo') {
-            elementoStatus.innerText = 'PRODUTIVO';
-            elementoStatus.className = 'px-3 py-1 text-sm font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 rounded-full shadow-neon-green';
-        } else {
-            elementoStatus.innerText = 'IMPRODUTIVO';
-            elementoStatus.className = 'px-3 py-1 text-sm font-bold text-rose-300 bg-rose-950/80 border border-rose-500/30 rounded-full shadow-neon-red';
-        }
-        adicionarAoHistorico(textoEmail.value || arquivoPdf.files[0].name, data);
-        loadingState.classList.add('hidden');
-        resultsSection.classList.remove('hidden');
+
+        if (!response.ok) throw new Error('Erro na API');
+
+        const dados = await response.json();
+
+        textoResposta.innerText = dados.resposta_sugerida;
+        atualizarBadgeStatus(dados.classificacao);
+        adicionarAoHistorico(textoEmail.value || inputArquivo.files[0].name, dados);
+
+        areaCarregando.classList.add('hidden');
+        areaResultado.classList.remove('hidden');
+
     } catch (error) {
         console.error(error);
-        alert("Erro ao processar. Tente novamente.");
-        loadingState.classList.add('hidden');
-        inputSection.classList.remove('hidden');
+        alert("Ocorreu um erro ao processar. Tente novamente.");
+        areaCarregando.classList.add('hidden');
+        areaInput.classList.remove('hidden');
     }
 });
-function adicionarAoHistorico(origem, dadosIA) {
-    const table = document.getElementById('history-table');
-    const row = table.insertRow(1);
-    row.className = "border-b border-slate-700 hover:bg-slate-800/50 transition-colors";
-    const cellNum = row.insertCell(0);
-    const cellCont = row.insertCell(1);
-    const cellStat = row.insertCell(2);
-    const cellMot = row.insertCell(3);
-    cellNum.innerText = table.rows.length - 1;
-    cellCont.innerText = origem.substring(0, 40) + "...";
-    cellStat.innerText = dadosIA.classificacao;
-    cellMot.innerText = dadosIA.justificativa;
-    [cellNum, cellCont, cellStat, cellMot].forEach(c => c.className = "px-4 py-3 text-sm text-slate-300 border-x border-slate-700");
-    if (dadosIA.classificacao === 'Produtivo') {
-        cellStat.classList.add('text-emerald-400', 'font-bold');
+
+btnNovaAnalise.addEventListener('click', () => {
+    areaResultado.classList.add('hidden');
+    areaInput.classList.remove('hidden');
+
+    textoEmail.value = '';
+    inputArquivo.value = '';
+
+    visualizacaoArquivo.classList.add('hidden');
+    visualizacaoArquivo.classList.remove('flex');
+    textoEmail.classList.remove('hidden');
+    labelUpload.classList.remove('border-indigo-500', 'bg-indigo-500/10');
+});
+
+function atualizarBadgeStatus(status) {
+    const ehProdutivo = status === 'Produtivo';
+    badgeStatus.innerText = status;
+    
+    if (ehProdutivo) {
+        badgeStatus.className = 'px-4 py-1 text-xs font-bold uppercase tracking-wider rounded-full border shadow-neon-verde bg-emerald-500/10 border-emerald-500/50 text-emerald-400';
     } else {
-        cellStat.classList.add('text-rose-400', 'font-bold');
+        badgeStatus.className = 'px-4 py-1 text-xs font-bold uppercase tracking-wider rounded-full border shadow-neon-vermelho bg-rose-500/10 border-rose-500/50 text-rose-400';
     }
 }
-btnReset.addEventListener('click', () => {
-    resultsSection.classList.add('hidden');
-    inputSection.classList.remove('hidden');
-    document.getElementById('email-content').value = '';
-    document.getElementById('file-upload').value = '';
-    btnFile.innerText = 'Upload Arquivo (.txt, .pdf)';
-    uploadLabel.classList.remove('animate-pulse-glow', 'bg-cyan-900');
-    textoEmail.classList.remove('hidden');
-    uploadSection.classList.remove('justify-center', 'h-48');
-    iconUpload.classList.add('hidden');
-});
+
+function adicionarAoHistorico(origem, dados) {
+    const tbody = document.querySelector('#tabela-historico tbody');
+    const row = tbody.insertRow(0);
+    
+    row.className = "hover:bg-white/5 transition-colors group border-b border-white/5";
+    
+    const numId = tbody.rows.length;
+    const resumo = origem.length > 30 ? origem.substring(0, 30) + '...' : origem;
+
+    const corStatus = dados.classificacao === 'Produtivo' ? 'text-emerald-400' : 'text-rose-400';
+    const bolinha = dados.classificacao === 'Produtivo' ? 'bg-emerald-400' : 'bg-rose-400';
+
+    row.innerHTML = `
+        <td class="px-6 py-4 font-mono text-gray-600 group-hover:text-indigo-400">#${String(numId).padStart(3, '0')}</td>
+        <td class="px-6 py-4 text-gray-300">${resumo}</td>
+        <td class="px-6 py-4">
+            <span class="inline-flex items-center gap-2 ${corStatus}">
+                <span class="w-1.5 h-1.5 rounded-full ${bolinha}"></span>
+                ${dados.classificacao}
+            </span>
+        </td>
+        <td class="px-6 py-4 text-gray-400">${dados.justificativa}</td>
+    `;
+}
