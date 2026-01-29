@@ -4,15 +4,12 @@ RayAI é uma solução digital desenvolvida para automatizar a leitura, classifi
 
 ---
 
-## 🔎 Documentação para Leigos
-Para uma explicação detalhada de cada linha de código deste projeto, veja o documento:
-👉 **[EXPLICACAO_TECNICA.md](file:///c:/Users/deydi/RayAI/EXPLICACAO_TECNICA.md)**
-
----
-
 ## 🚀 Links do Projeto
 
-- **Deploy (Render):** [https://rayai-autou.onrender.com/](https://rayai-autou.onrender.com/)
+- **Deploy1 (Render):** [https://rayai-autou.onrender.com/](https://rayai-autou.onrender.com/)
+> [!IMPORTANT]
+> **Observação sobre o Deploy:** Como a aplicação está hospedada no plano gratuito do Render, a instância entra em modo de repouso após um período de inatividade. O primeiro acesso pode levar de **30 a 60 segundos** para carregar enquanto o servidor "acorda". Caso o a inatividade persistir, acesse o link reserva abaixo.
+- **Deploy2 (Koyeb):** [https://rayai-autou.onrender.com/](https://rayai-autou.onrender.com/)
 - **Repositório GitHub:** [https://github.com/NishimotoEydi/rayai-autou](https://github.com/NishimotoEydi/rayai-autou)
 
 ---
@@ -33,9 +30,6 @@ rayai-autou/
 ├── .env                # Variáveis de ambiente (Chave da API)
 └── README.md           # Documentação principal
 ```
-
-> [!IMPORTANT]
-> **Observação sobre o Deploy:** Como a aplicação está hospedada no plano gratuito do Render, a instância entra em modo de repouso após um período de inatividade. O primeiro acesso pode levar de **30 a 60 segundos** para carregar enquanto o servidor "acorda".
 
 ---
 
