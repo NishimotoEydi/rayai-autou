@@ -103,7 +103,7 @@ GROQ_API_KEY=sua_chave_aqui
 
 ### 5. Iniciar o Servidor
 ```bash
-python app/main.py
+uvicorn app.main:app --reload
 ```
 Acesse em: `http://localhost:8000`
 
