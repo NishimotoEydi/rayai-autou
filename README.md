@@ -8,8 +8,8 @@ RayAI é uma solução digital desenvolvida para automatizar a leitura, classifi
 
 - **Deploy1 (Render):** [https://rayai-autou.onrender.com/](https://rayai-autou.onrender.com/)
 > [!IMPORTANT]
-> **Observação sobre o Deploy:** Como a aplicação está hospedada no plano gratuito do Render, a instância entra em modo de repouso após um período de inatividade. O primeiro acesso pode levar de **30 a 60 segundos** para carregar enquanto o servidor "acorda". Caso o a inatividade persistir, acesse o link reserva abaixo.
-- **Deploy2 (Koyeb):** [https://rayai-autou.onrender.com/](https://rayai-autou.onrender.com/)
+> **Observação sobre o Deploy:** Como a aplicação está hospedada no plano gratuito do Render, a instância entra em modo de repouso após um período de inatividade. O primeiro acesso pode levar de **30 a 60 segundos** para carregar enquanto o servidor "acorda". Caso a inatividade persistir, acesse o link reserva abaixo.
+- **Deploy2 (Koyeb):** [https://grand-tracey-eynish-fd49fdc4.koyeb.app/](https://grand-tracey-eynish-fd49fdc4.koyeb.app/)
 - **Repositório GitHub:** [https://github.com/NishimotoEydi/rayai-autou](https://github.com/NishimotoEydi/rayai-autou)
 
 ---
@@ -45,7 +45,7 @@ RayAI utiliza Inteligência Artificial para classificar essas mensagens automati
 - **Upload de Arquivos:** Suporte para leitura de arquivos `.txt` e `.pdf`.
 - **Análise com IA:** Classificação em tempo real entre "Produtivo" e "Improdutivo".
 - **Sugestão de Resposta:** Geração automática de uma resposta formal e prestativa para e-mails produtivos.
-- **Interface Premium:** Experiência de usuário moderna com modo escuro, efeitos de vidro (glassmorphism) e histórico de análises.
+- **Interface Premium:** Design de interface inovador explorando o 'Dark Glassmorphism'. A composição utiliza fundos profundos, gradientes sofisticados (Indigo/Violeta/Ciano) e a fonte Inter para uma leitura Clara. As microinterações suaves foram desenhadas para tornar a navegação intuitiva e fluida.
 
 ---
 
@@ -107,4 +107,4 @@ Acesse em: `http://localhost:8000`
 A IA foi configurada com um *System Prompt* específico para garantir que as classificações sigam rigorosamente os critérios do desafio. O processamento de texto inclui uma etapa de limpeza para remover pontuação e palavras irrelevantes, melhorando a precisão da análise pelo modelo de LLM.
 
 ---
-Desenvolvido por [Nishimoto Eydi](https://github.com/NishimotoEydi)
+Desenvolvido por [Eydi Nishimoto](https://github.com/NishimotoEydi)
